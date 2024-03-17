@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 
 public class VK
 {
@@ -29,7 +29,7 @@ public class VK
         }
         catch (Exception e)
         {
-            Console.WriteLine($"WEST REPORT | Error sending message to VK: {e.Message}");
+            Console.WriteLine($"WEST REPORT SYSTEM | Error sending message to VK: {e.Message}");
             return false;
         }
     }
