@@ -1,0 +1,9 @@
+{
+	"wrs.MenuTitle": "WEST REPORT SYSTEM",
+	"wrs.Prefix": "WEST REPORT",
+	"wrs.MaxReportsPerRound": "Maximum number of reports per round: ",
+	"wrs.NoSuitablePlayersOnTheServer": "There are no suitable players on the server.", "wrs.NoSuitablePlayersOnTheServer",
+	"wrs.SelectTheReasonForTheComplaint": "Select the reason for the complaint",
+	"wrs.NotifyPlayerAboutReport": "Report on player: {blue}{0}{default} sent\n{white}Reason: {1}",
+	"wrs.IntruderNotFound": "Intruder not found."
+}

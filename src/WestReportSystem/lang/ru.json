@@ -1,0 +1,9 @@
+{
+	"wrs.MenuTitle": "WEST REPORT SYSTEM",
+	"wrs.Prefix": "WEST REPORT",
+	"wrs.MaxReportsPerRound": "Макисмальное количество репортов за раунд: ",
+	"wrs.NoSuitablePlayersOnTheServer": "На сервере нет подходящих игроков",
+	"wrs.SelectTheReasonForTheComplaint": "Выберите причину жалобы",
+	"wrs.NotifyPlayerAboutReport": "Репорт на игрока: {blue}{0}{default} отправлен\n{white}Причина: {1}",
+	"wrs.IntruderNotFound": "Нарушитель не найден",
+}
