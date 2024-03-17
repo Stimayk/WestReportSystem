@@ -1,63 +1,62 @@
-﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Core.Capabilities;
 using CounterStrikeSharp.API.Modules.Cvars;
-using Modularity;
 using WestReportSystemApi;
 
 namespace WestReportToVK
 {
-    public class WestReportToVK : BasePlugin, IModulePlugin
+    public class WestReportToVK : BasePlugin
     {
-        private IApiProvider? _apiProvider;
-        private VK? _vk;
 
         public override string ModuleName => "WestReportToVK";
-        public override string ModuleVersion => "1.0";
+        public override string ModuleVersion => "1.0.1";
         public override string ModuleAuthor => "E!N";
 
-        public void LoadModule(IApiProvider provider)
-        {
-            if (!provider.Get<IWestReportSystemApi>().IsCoreLoaded())
-            {
-                Server.PrintToConsole($"WEST REPORT | API для {ModuleName} не было инициализировано.");
-                return;
-            }
+        private IWestReportSystemApi? _api;
+        private VK? _vk;
 
-            _apiProvider = provider;
-            InitializeVK(provider);
-            provider.Get<IWestReportSystemApi>().SetReportDelegate(WRS_SendReport);
-            Server.PrintToConsole($"WEST REPORT | API для {ModuleName} было инициализировано.");
+        private PluginCapability<IWestReportSystemApi> PluginCapability { get; } = new("westreportsystem:core");
+
+        public override void OnAllPluginsLoaded(bool hotReload)
+        {
+            _api = PluginCapability.Get();
+            if (_api == null) return;
+
+            _api.OnCoreReady += () =>
+            {
+                InitializeVK();
+                _api.SetReportDelegate(WRS_SendReport);
+            };
         }
 
-        private void InitializeVK(IApiProvider provider)
+        private void InitializeVK()
         {
             try
             {
-                var vkToken = provider.Get<IWestReportSystemApi>().GetConfigValue<string>("VkToken");
-                var vkPeerId = provider.Get<IWestReportSystemApi>().GetConfigValue<string>("VkPeerId");
-                var siteLink = provider.Get<IWestReportSystemApi>().GetConfigValue<string>("SiteLink");
+                var vkToken = _api?.GetConfigValue<string>("VkToken");
+                var vkPeerId = _api?.GetConfigValue<string>("VkPeerId");
+                var siteLink = _api?.GetConfigValue<string>("SiteLink");
 
                 if (vkToken == null || vkPeerId == null || siteLink == null)
-                    throw new InvalidOperationException("Необходимые параметры конфигурации VK отсутствуют");
+                    throw new InvalidOperationException("Necessary VK configuration parameters are missing");
 
                 _vk = new VK(vkToken, vkPeerId, siteLink);
             }
             catch (Exception ex)
             {
-                Server.PrintToConsole($"WEST REPORT | Ошибка при инициализации {ModuleName}: {ex.Message}");
+                Server.PrintToConsole($"WEST REPORT SYSTEM | Error during initialization of {ModuleName}: {ex.Message}");
             }
         }
 
         public void WRS_SendReport(CCSPlayerController controller, int targetIndex, string reason)
         {
-            if (_apiProvider == null) return;
-
             try
             {
                 var target = FindTargetPlayer(targetIndex);
                 if (target == null)
                 {
-                    controller.PrintToChat("Нарушитель не найден");
+                    controller.PrintToChat($"{_api?.GetTranslatedText("wrs.IntruderNotFound")}");
                     return;
                 }
 
@@ -66,7 +65,7 @@ namespace WestReportToVK
             }
             catch (Exception ex)
             {
-                Server.PrintToConsole($"WEST REPORT | Ошибка при отправке репорта в VK: {ex.Message}");
+                Server.PrintToConsole($"WEST REPORT SYSTEM | Error sending report to VK: {ex.Message}");
             }
         }
 
@@ -81,7 +80,7 @@ namespace WestReportToVK
             var mapName = NativeAPI.GetMapName();
             var serverIp = ConVar.Find("ip")?.StringValue ?? "Unknown IP";
             var serverPort = ConVar.Find("hostport")?.GetPrimitiveValue<int>().ToString() ?? "Unknown Port";
-            var vkAdmins = _apiProvider?.Get<IWestReportSystemApi>().GetConfigValue<string[]>("VkAdmins");
+            var vkAdmins = _api?.GetConfigValue<string[]>("VkAdmins");
 
             _vk?.Send(serverName, vkAdmins, controller.PlayerName, controller.SteamID, target.PlayerName, target.SteamID, reason, mapName, serverIp, serverPort);
         }
@@ -95,8 +94,8 @@ namespace WestReportToVK
 
         private void UpdateReportStatus(CCSPlayerController controller, string targetPlayerName, string reason)
         {
-            _apiProvider?.Get<IWestReportSystemApi>().UpdateReportCountForController(controller);
-            _apiProvider?.Get<IWestReportSystemApi>().NotifyPlayerAboutReport(controller, targetPlayerName, reason);
+            _api?.UpdateReportCountForController(controller);
+            _api?.NotifyPlayerAboutReport(controller, targetPlayerName, reason);
         }
     }
 }
