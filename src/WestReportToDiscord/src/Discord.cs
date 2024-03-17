@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
 using System.Text;
+using System.Text.Json;
 
 public class Discord
 {
@@ -28,7 +28,7 @@ public class Discord
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"WEST REPORT | Error sending message to Discord: {ex.Message}");
+            Console.WriteLine($"WEST REPORT SYSTEM | Error sending message to Discord: {ex.Message}");
             return false;
         }
     }
