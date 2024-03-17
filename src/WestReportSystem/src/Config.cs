@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 public class Config
 {
-    // Определение свойств конфигурации
+    // РћРїСЂРµРґРµР»РµРЅРёРµ СЃРІРѕР№СЃС‚РІ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
     public string? VkToken { get; set; }
     public string? VkPeerId { get; set; }
     public string[]? VkAdmins { get; set; }
@@ -12,14 +12,18 @@ public class Config
     public string[]? DiscordAdmins { get; set; }
 
     public int MaxReportsPerRound { get; set; } = 3;
-    public string[] ReportReasons { get; set; } = { "Читы", "Оскорбления", "Флуд", "Токсик", "Мониторинг" };
+    public string[] ReportReasons { get; set; } = { "Р§РёС‚С‹", "РћСЃРєРѕСЂР±Р»РµРЅРёСЏ", "Р¤Р»СѓРґ", "РўРѕРєСЃРёРє", "РњРѕРЅРёС‚РѕСЂРёРЅРі" };
 
     public bool AllowCustomReason { get; set; }
 
     public string? SiteLink { get; set; }
     public required string[] Commands { get; set; }
 
-    // Загрузка конфигурации
+    public float ChatNotifyTimer { get; set; } = 20.0f;
+
+    public bool RecordChatHistory { get; set; }
+
+    // Р—Р°РіСЂСѓР·РєР° РєРѕРЅС„РёРіСѓСЂР°С†РёРё
     public static Config Load()
     {
         string configFilePath = GetConfigFilePath();
@@ -29,7 +33,7 @@ public class Config
         return cfg;
     }
 
-    // Получение пути к файлу конфигурации
+    // РџРѕР»СѓС‡РµРЅРёРµ РїСѓС‚Рё Рє С„Р°Р№Р»Сѓ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
     private static string GetConfigFilePath()
     {
         string path = GetCfgDirectory() + "/WestReportSystem";
@@ -37,7 +41,7 @@ public class Config
         return $"{path}/core.json";
     }
 
-    // Чтение файла конфигурации
+    // Р§С‚РµРЅРёРµ С„Р°Р№Р»Р° РєРѕРЅС„РёРіСѓСЂР°С†РёРё
     private static string ReadConfigFile(string filePath)
     {
         try
@@ -51,7 +55,7 @@ public class Config
         }
     }
 
-    // Получение директории конфигурации
+    // РџРѕР»СѓС‡РµРЅРёРµ РґРёСЂРµРєС‚РѕСЂРёРё РєРѕРЅС„РёРіСѓСЂР°С†РёРё
     private static string GetCfgDirectory()
     {
         return Server.GameDirectory + "/csgo/addons/counterstrikesharp/configs/plugins/";
