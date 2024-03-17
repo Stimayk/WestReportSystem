@@ -1,4 +1,4 @@
-﻿using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Core;
 
 namespace WestReportSystemApi
 {
@@ -7,7 +7,7 @@ namespace WestReportSystemApi
         /// <summary>
         /// Проверяет, загружено ли ядро WestReportSystem.
         /// </summary>
-        bool IsCoreLoaded();
+        public event Action? OnCoreReady;
 
         /// <summary>
         /// Регистрирует делегат для отправки репортов.
@@ -44,5 +44,7 @@ namespace WestReportSystemApi
         /// </summary>
         Dictionary<CCSPlayerController, int> WRS_GetCooldown(CCSPlayerController? controller);
         bool TryGetConfigValue<T>(string propertyName, out T? value);
+
+        string GetTranslatedText(string name, params object[] args);
     }
 }
