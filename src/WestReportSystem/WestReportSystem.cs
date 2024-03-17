@@ -1,46 +1,49 @@
-﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes;
+using CounterStrikeSharp.API.Core.Capabilities;
 using CounterStrikeSharp.API.Modules.Menu;
 using CounterStrikeSharp.API.Modules.Utils;
-using Modularity;
 using WestReportSystemApi;
 
 namespace WestReportSystem;
 
-[MinimumApiVersion(153)]
-public class WestReportSystem : BasePlugin, ICorePlugin
+[MinimumApiVersion(184)]
+public class WestReportSystem : BasePlugin
 {
     public override string ModuleName => "WestReportSystem";
     public override string ModuleAuthor => "E!N";
     public override string ModuleDescription => "Modular reporting system";
-    public override string ModuleVersion => "v1.0";
+    public override string ModuleVersion => "v1.1";
 
     private static readonly Dictionary<CCSPlayerController, int> amountThisRound = new();
-    private static readonly string ChatPrefix = $" {ChatColors.Orange}WEST REPORT | ";
-    public WestReportSystemApi? ReportApi { get; private set; }
-    public static bool CoreLoaded { get; private set; }
+    private static string? ChatPrefix;
+    public WestReportSystemApi? _api;
 
     static readonly Config cfg = Config.Load();
 
+    public static bool CoreLoaded { get; private set; }
+
+    private readonly PluginCapability<WestReportSystemApi> _pluginCapability = new("westreportsystem:core");
+
     public override void Load(bool hotReload)
     {
-        LoadCore(new PluginApis());
-    }
-
-    public void LoadCore(IApiRegisterer apiRegisterer)
-    {
-        ReportApi = new WestReportSystemApi();
-        apiRegisterer.Register<IWestReportSystemApi>(ReportApi);
+        _api = new WestReportSystemApi(this);
+        Capabilities.RegisterPluginCapability(_pluginCapability, () => _api);
 
         SetupEventHandlers();
+        SetupPrefix();
         CreateReportMenu();
-        CoreLoaded = true;
     }
 
     private void SetupEventHandlers()
     {
         RegisterEventHandler<EventRoundStart>(OnRoundStart);
+    }
+
+    private void SetupPrefix()
+    {
+        ChatPrefix = $" {ChatColors.Orange}{Localizer["wrs.Prefix"]} | ";
     }
 
     private HookResult OnRoundStart(EventRoundStart @event, GameEventInfo info)
@@ -57,7 +60,7 @@ public class WestReportSystem : BasePlugin, ICorePlugin
 
     private CenterHtmlMenu InitializeReportMenu()
     {
-        var reportPlayerMenu = new CenterHtmlMenu($"WEST REPORT SYSTEM");
+        var reportPlayerMenu = new CenterHtmlMenu($"{Localizer["wrs.MenuTitle"]}");
         reportPlayerMenu.MenuOptions.Clear();
         return reportPlayerMenu;
     }
@@ -92,7 +95,7 @@ public class WestReportSystem : BasePlugin, ICorePlugin
 
     private void InformPlayerAboutReportLimit(CCSPlayerController player)
     {
-        player.PrintToChat($" {ChatPrefix}Максимальное кол-во репортов за раунд: {cfg.MaxReportsPerRound}");
+        player.PrintToChat($" {ChatPrefix}{Localizer["wrs.MaxReportsPerRound"]} {cfg.MaxReportsPerRound}");
     }
 
     private void CreateReportPlayerMenu(CenterHtmlMenu reportPlayerMenu, CCSPlayerController controller)
@@ -102,7 +105,7 @@ public class WestReportSystem : BasePlugin, ICorePlugin
         var eligiblePlayers = GetEligiblePlayersForReport(controller);
         if (!eligiblePlayers.Any())
         {
-            controller.PrintToChat($" {ChatPrefix}На сервере нет подходящих игроков");
+            controller.PrintToChat($" {ChatPrefix}{Localizer["wrs.NoSuitablePlayersOnTheServer"]}");
             return;
         }
 
@@ -130,7 +133,7 @@ public class WestReportSystem : BasePlugin, ICorePlugin
 
     private void CreateReportReasonsMenu(CCSPlayerController controller, int targetIndex)
     {
-        var reportReasonMenu = new CenterHtmlMenu("Выберите причину жалобы");
+        var reportReasonMenu = new CenterHtmlMenu($"{Localizer["wrs.SelectTheReasonForTheComplaint"]}");
         AddStandardReportReasons(reportReasonMenu, controller, targetIndex);
         //AddCustomReportReasonOption(reportReasonMenu, controller);
         MenuManager.OpenCenterHtmlMenu(this, controller, reportReasonMenu);
@@ -140,7 +143,7 @@ public class WestReportSystem : BasePlugin, ICorePlugin
     {
         foreach (var reason in cfg.ReportReasons)
         {
-            reportReasonMenu.AddMenuOption(reason, (ctrl, option) => ReportApi?.WRS_SendReport(ctrl, targetIndex, reason));
+            reportReasonMenu.AddMenuOption(reason, (ctrl, option) => _api?.WRS_SendReport(ctrl, targetIndex, reason));
         }
     }
 
@@ -157,10 +160,20 @@ public class WestReportSystem : BasePlugin, ICorePlugin
 
     public class WestReportSystemApi : IWestReportSystemApi
     {
+        private readonly WestReportSystem _WestReportSystemCore;
+
+        public string WestReportSystem { get; }
+
+        public WestReportSystemApi(WestReportSystem WestReportSystemCore)
+        {
+            _WestReportSystemCore = WestReportSystemCore;
+
+            WestReportSystem = WestReportSystemCore.ModuleName;
+        }
+
         private readonly List<Action<CCSPlayerController, int, string>> _sendReportDelegates = new();
 
-        // Проверка загрузки ядра
-        public bool IsCoreLoaded() => CoreLoaded;
+        public event Action? OnCoreReady;
 
         // Регистрация делегата для отправки репортов
         public void SetReportDelegate(Action<CCSPlayerController, int, string> sendReportDelegate)
@@ -196,7 +209,7 @@ public class WestReportSystem : BasePlugin, ICorePlugin
         // Уведомление игрока о репорте
         public void NotifyPlayerAboutReport(CCSPlayerController? controller, string targetPlayerName, string reason)
         {
-            controller?.PrintToCenter($"Репорт на игрока: {targetPlayerName} отправлен\n{ChatColors.White}Причина: {reason}");
+            controller?.PrintToChat($" {_WestReportSystemCore.Localizer["wrs.NotifyPlayerAboutReport", targetPlayerName, reason]}");
         }
 
         // Получение значения из конфигурации
@@ -245,5 +258,7 @@ public class WestReportSystem : BasePlugin, ICorePlugin
             value = default;
             return false;
         }
+
+        public string GetTranslatedText(string name, params object[] args) => _WestReportSystemCore.Localizer[name, args];
     }
 }
