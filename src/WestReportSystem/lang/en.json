@@ -1,9 +1,60 @@
 {
-	"wrs.MenuTitle": "WEST REPORT SYSTEM",
-	"wrs.Prefix": "WEST REPORT",
-	"wrs.MaxReportsPerRound": "Maximum number of reports per round: ",
-	"wrs.NoSuitablePlayersOnTheServer": "There are no suitable players on the server.", "wrs.NoSuitablePlayersOnTheServer",
+	"wrs.SystemName": "WEST REPORT SYSTEM",
+	"wrs.Prefix": "{darkred} WestReportSystem",
+	"wrs.NoSuitablePlayersOnTheServer" : "{red} There are no suitable players on the server",
+	"wrs.NotifyPlayerAboutReport" : " {yellow}Report successfully sent, {red}violator - {0}, {green}reason - {1}", // {0} - violator's name, {1} - reason for the report
+	"wrs.MaxReportsPerRound" : "Maximum number of reports per round: ",
+	"wrs.MenuTitle": "WestReportSystem",
 	"wrs.SelectTheReasonForTheComplaint": "Select the reason for the complaint",
-	"wrs.NotifyPlayerAboutReport": "Report on player: {blue}{0}{default} sent\n{white}Reason: {1}",
-	"wrs.IntruderNotFound": "Intruder not found."
+	"wrs.SelectChatMessage": "Select message from chat",
+	"wrs.CustomReason": "Other reason",
+	"wrs.EnterCustomReason": "Enter the reason for the complaint in chat",
+	"wrs.Confirm": "Yes, all correct",
+	"wrs.Change": "No, change",
+	"wrs.ConfirmationDetails": "Are you sure you want to report the player - ",
+	"wrs.TargetPlayer": "player - ",
+	"wrs.Reason": "for the reason - ",
+	"wrs.ModuleNotActive": "No module to send the report",
+	"wrs.ChatMessage": "Chat message",
+	"wrs.NoChatMessages": "This player did not send any messages in chat",
+	"wrs.PrimeTrue": "Has",
+	"wrs.PrimeFalse": "Does not have",
+	"wrtd.EmbedAuthor": "WestReportToDiscord",
+	"wrtd.EmbedColor": "#FF0000",
+	"wrtd.Title": "# 🚨 A new complaint has arrived!",
+	"wrtd.Server": "🖥️ Server: ",
+	"wrtd.Administrators" : "👮🏿 Administrators: ",
+	"wrtd.SenderTitle": "👨 Sender:",
+	"wrtd.ViolatorTitle": "🧌 Violator:",
+	"wrtd.SenderDescription": "**{0}** [Prime: {2}]\nSteamID: `{1}`\n[Profile](https://steamcommunity.com/profiles/{1})", // {0} - sender's name, {1} - steam id, {2} - prime status
+	"wrtd.ViolatorDescription": "**{0}** [Prime: {2}]\nSteamID: `{1}`\n[Profile](https://steamcommunity.com/profiles/{1})", // {0} - violator's name, {1} - steam id, {2} - prime status
+	"wrtd.ComplaintReason": "🖹 Reason for complaint:",
+	"wrtd.Map": "🗺️ Map: ",
+	"wrtd.MapDescription": "{0} [Reports per map: {1}]",
+	"wrtd.ConnectToServerTitle": "📡 Connect to server:",
+	"wrtd.ConnectToServerDescription": "[**Click**](https://{2}/redirect.php?ip={0}:{1})", // {0} - server ip, {1} - server port, {2} - link
+	"wrtd.FooterText": "FooterText",
+	"wrtd.ThumbnailURL": "s0.rbk.ru/v6_top_pics/media/img/8/32/754598726300328.jpeg",
+	"wrtd.ImageURL": "",
+	"wrcn.ChatMessage": "{0} | {white}See a violator? Use the command {red}!{1}{white} to call an administrator!", // {0} - Prefix, {1} - report command
+	"wrcn.HudMessage": "<font class='fontSize-l' color='red'>See a violator?<br>Use the command <br><font class='fontSize-l' color='white'>!{0}<br><font class='fontSize-l' color='red'>administrator will come to help!", // {0} - report command (html code can be used)
+	"wran.ChatMessage": "{0} | {white}New report on player {red}{1}{white}from player {green}{2}{white}! Reason: {yellow}{3}", // {0} - Prefix, {1} - violator's nickname, {2} - sender's nickname, {3} - reason
+	"wran.HudMessage": "<font class='fontSize-l' color='red'>A complaint has been received!<br><font class='fontSize-l' color='white'>On player: <font class='fontSize-l' color='red'>{0}<br><font class='fontSize-l' color='white'>From player: <font class='fontSize-l' color='green'>{1}<br><br><font class='fontSize-l' color='white'>Reason: <font class='fontSize-l' color='yellow'>{2}", // {0} - violator's nickname, {1} - sender's nickname, {2} - reason (html code can be used)
+	"wrhn.HudMessage": "<font class='fontSize-l' color='white'>Report on player<br><font class='fontSize-l' color='red'>{0}<br><font class='fontSize-l' color='green'>sent<br> <img src=\"{2}\"><br><br>", // {0} - violator's nickname, {1} - reason, {2} - avatar (html code can be used)
+	"wrtv.Title": "🚨 A new complaint has arrived!\n\n", // - title, {0} - server
+	"wrtv.Server": "🖥️ Server: {0}\n\n", // {0} - server
+	"wrtv.Sender": "👨 Sender: {0} [{1}] [Prime-status: {2}]\n🔗 Link to Steam: https://steamcommunity.com/profiles/{1}/\n",  // {0} - sender's name, {1} - steam id, {2} - prime
+	"wrtv.Violator": "🧌 Violator: {0} [{1}] [Prime-status: {2}]\n🔗 Link to Steam: https://steamcommunity.com/profiles/{1}/\n", // {0} - violator's name, {1} - steam id, {2} - prime
+	"wrtv.Reason": "🖹 Reason for complaint: {0}\n\n", // {0} - reason
+	"wrtv.Map": "🗺️ Map: {0} [Reports per map: {1}]\n\n", // {0} - map, {1} - number of reports per map
+	"wrtv.Administrators": "👮🏿 Administrators:\n{0}\n\n", // {0} Administrators
+	"wrtv.Connect": "📡 Connect to server: \n https://{2}/redirect.php?ip={0}:{1}",  // {0} - server ip, {1} - server port, {2} - link
+	"wrttg.Title": "🚨 A new complaint has arrived!\n\n", // - title, {0} - server
+	"wrttg.Server": "🖥️ Server: {0}\n\n", // {0} - server
+	"wrttg.Sender": "👨 Sender: {0} [{1}] [Prime-status: {2}]\n🔗 Link to Steam: https://steamcommunity.com/profiles/{1}/\n",  // {0} - sender's name, {1} - steam id, {2} - prime
+	"wrttg.Violator": "🧌 Violator: {0} [{1}] [Prime-status: {2}]\n🔗 Link to Steam: https://steamcommunity.com/profiles/{1}/\n", // {0} - violator's name, {1} - steam id, {2} - prime
+	"wrttg.Reason": "🖹 Reason for complaint: {0}\n\n", // {0} - reason
+	"wrttg.Map": "🗺️ Map: {0} [Reports per map: {1}]\n\n", // {0} - map, {1} - number of reports per map
+	"wrttg.Administrators": "👮🏿 Administrators:\n{0}\n\n", // {0} Administrators
+	"wrttg.Connect": "📡 Connect to server: \n https://{2}/redirect.php?ip={0}:{1}"  // {0} - server ip, {1} - server port, {2} - link
 }
