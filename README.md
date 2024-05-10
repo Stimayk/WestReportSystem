@@ -1,16 +1,23 @@
 # WestReportSystem
 Modular report system for your CS:2 server - WestReportSystem
 
-Reporting system core
+**Reporting system core**
 
 Capabilities:
 Customizing the command to send a report
+
 Customization of sending your reason
+
 Report on a message from chat
-Limit the number of reports per round.
+
+Limit the number of reports per round
+
 Displaying if the sender and offender have Prime Status
+
 Display the number of reports per card
+
 Support for translations into different languages
+
 
 Configuration file:
 ```
