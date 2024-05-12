@@ -1,4 +1,4 @@
-﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
@@ -451,15 +451,23 @@ namespace WestReportSystemReborn
             // Check for Prime status
             public bool HasPrimeStatus(ulong steamID)
             {
-                CSteamID cSteamID = new(steamID);
+                try
+                {
+                    CSteamID cSteamID = new(steamID);
 
-                var primeStatusApp1 = SteamGameServer.UserHasLicenseForApp(cSteamID, new AppId_t(624820));
-                var primeStatusApp2 = SteamGameServer.UserHasLicenseForApp(cSteamID, new AppId_t(54029));
+                    var primeStatusApp1 = SteamGameServer.UserHasLicenseForApp(cSteamID, new AppId_t(624820));
+                    var primeStatusApp2 = SteamGameServer.UserHasLicenseForApp(cSteamID, new AppId_t(54029));
 
-                bool hasPrime = primeStatusApp1 == EUserHasLicenseForAppResult.k_EUserHasLicenseResultHasLicense ||
-                                primeStatusApp2 == EUserHasLicenseForAppResult.k_EUserHasLicenseResultHasLicense;
+                    bool hasPrime = primeStatusApp1 == EUserHasLicenseForAppResult.k_EUserHasLicenseResultHasLicense ||
+                                    primeStatusApp2 == EUserHasLicenseForAppResult.k_EUserHasLicenseResultHasLicense;
 
-                return hasPrime;
+                    return hasPrime;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error checking Prime status for SteamID {steamID}: {ex.Message}, Prime will always be unavailable");
+                    return false;
+                }
             }
 
             // Getting the number of reports per map
