@@ -18,7 +18,7 @@ namespace WestReportSystemReborn
         public override string ModuleName => "WestReportSystem";
         public override string ModuleAuthor => "E!N";
         public override string ModuleDescription => "Modular reporting system";
-        public override string ModuleVersion => "v1.2";
+        public override string ModuleVersion => "v1.2.1";
 
         private static readonly Dictionary<CCSPlayerController, int> amountThisRound = [];
         public Dictionary<CCSPlayerController, List<(DateTime, string)>> PlayerChatHistory = [];
@@ -139,7 +139,7 @@ namespace WestReportSystemReborn
         private static IEnumerable<CCSPlayerController> GetEligiblePlayersForReport(CCSPlayerController reportingPlayer)
         {
             return Utilities.GetPlayers().Where(player =>
-            player.PlayerName == reportingPlayer.PlayerName && !player.IsHLTV && player.Pawn.IsValid && !player.IsBot);
+            player.PlayerName != reportingPlayer.PlayerName && !player.IsHLTV && player.Pawn.IsValid && !player.IsBot);
         }
 
         private void AddPlayerToReportMenu(CenterHtmlMenu reportPlayerMenu, CCSPlayerController violator)
